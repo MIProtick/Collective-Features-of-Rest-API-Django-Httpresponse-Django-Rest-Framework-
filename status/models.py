@@ -33,3 +33,7 @@ class Status(models.Model):
 
     def __str__(self):
         return str(self.content)[:50]
+        
+    @property
+    def owner(self):
+        return self.user

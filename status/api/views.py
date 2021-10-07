@@ -4,8 +4,9 @@ import json
 # from rest_framework.views import APIView
 from rest_framework.generics import ListAPIView, RetrieveUpdateDestroyAPIView #, CreateAPIView, UpdateAPIView, DestroyAPIView, RetrieveAPIView, ListCreateAPIView
 from rest_framework.mixins import CreateModelMixin #, UpdateModelMixin, DestroyModelMixin, ListModelMixin, RetrieveModelMixin
-from rest_framework.authentication import SessionAuthentication
+# from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from accounts.api.permissions import IsOwnerOrReadOnly
 # from rest_framework.response import Response
 # from status.api.utils import custom_response
 
@@ -14,8 +15,8 @@ from .serializers import StatusSerializers
 
 
 class StatusDetailsView(RetrieveUpdateDestroyAPIView):
-    permission_classes = []
-    authentication_classes = []
+    permission_classes = [IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
+    # authentication_classes = []
     queryset = Status.objects.all()
     serializer_class = StatusSerializers
     lookup_field = 'id'
@@ -49,7 +50,7 @@ class StatusListView(CreateModelMixin,
                     # RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin, 
                     ListAPIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
-    authentication_classes = [SessionAuthentication]
+    # authentication_classes = [SessionAuthentication]
     queryset = Status.objects.all()
     serializer_class = StatusSerializers
     # lookup_field = 'id'

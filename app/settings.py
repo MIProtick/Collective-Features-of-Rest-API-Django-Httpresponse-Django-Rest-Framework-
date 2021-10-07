@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     
     'status',
     'updates',
+    'accounts',
 ]
 
 MIDDLEWARE = [
@@ -133,3 +134,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Media
 MEDIA_ROOT = BASE_DIR.parent/'static-server'/'media-root'
 MEDIA_URL = '/media/'
+
+
+from config.rest_config import *
