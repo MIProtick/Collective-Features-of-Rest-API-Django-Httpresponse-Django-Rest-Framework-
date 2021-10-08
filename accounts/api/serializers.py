@@ -15,6 +15,19 @@ REFRESH_DELAY = api_settings.JWT_REFRESH_EXPIRATION_DELTA
 
 User = get_user_model()
 
+class UserDescriptionSerializer(serializers.ModelSerializer):
+    uri = serializers.SerializerMethodField(read_only=True)
+    
+    class Meta:
+        model = User
+        # fields = '__all__'
+        exclude = ['user_permissions', 'groups', 'date_joined', 'password']
+        read_only_fields = ['uri']
+    
+    def get_uri(self, obj):
+        return f'/api/user/{obj.id}'
+        
+
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
     # password = serializers.CharField(style={'input_type': 'password'}, write_only=True)

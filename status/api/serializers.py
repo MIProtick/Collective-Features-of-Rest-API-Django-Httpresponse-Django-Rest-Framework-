@@ -1,8 +1,12 @@
 from rest_framework import fields, serializers
+from accounts.api.serializers import UserDescriptionSerializer
 
 from status.models import Status
 
 class StatusSerializers(serializers.ModelSerializer):
+    user = UserDescriptionSerializer(read_only=True)
+    image_url = serializers.SerializerMethodField(read_only=True)
+    uri = serializers.SerializerMethodField(read_only=True)
     class Meta:
         model = Status
         fields = [
@@ -10,14 +14,22 @@ class StatusSerializers(serializers.ModelSerializer):
             'user',
             'content',
             'image',
+            'image_url',
+            'uri',
         ]
-        read_only_fields = ['user']
+        read_only_fields = ['user', 'uri']
         
     # def validate_content(self, value):
     #     if len(value) > 1000000:
     #         raise serializers.ValidationError('Content must be less than 1000000 characters.')
         
     #     return value
+    
+    def get_image_url(self, obj):
+        return f'/{obj.image}'
+        
+    def get_uri(self, obj):
+        return f'/api/status/{obj.id}'
     
     def validate(self, data):
         content = data.get('content', None)
