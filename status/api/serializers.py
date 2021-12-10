@@ -1,7 +1,30 @@
 from rest_framework import fields, serializers
-from accounts.api.serializers import UserDescriptionSerializer
+from accounts.api.auth.serializers import UserDescriptionSerializer
 
 from status.models import Status
+
+
+class StatusNestedSerializers(serializers.ModelSerializer):
+    image_url = serializers.SerializerMethodField(read_only=True)
+    
+    class Meta:
+        model = Status
+        fields = [
+            'id',
+            'user',
+            'content',
+            'image',
+            'image_url',
+        ]
+        read_only_fields = ['user']
+    
+    def get_image_url(self, obj):
+        print(type(obj.image))
+        if obj.image :
+            return f'/{obj.image}'
+        else:
+            return f'/{obj.image}'
+
 
 class StatusSerializers(serializers.ModelSerializer):
     user = UserDescriptionSerializer(read_only=True)

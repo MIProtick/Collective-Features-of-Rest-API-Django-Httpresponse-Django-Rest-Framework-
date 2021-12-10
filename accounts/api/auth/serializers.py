@@ -42,6 +42,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         # fields = '__all__'
         exclude = ['user_permissions', 'groups', 'date_joined']
         extra_kwargs = {'password': {'write_only': True}}
+        read_only_fields = ['uri', 'is_active', 'is_superuser', 'is_staff', 'last_login']
 
     def validated_email(self, value):
         qs = User.objects.filter(email__iexact=value)
