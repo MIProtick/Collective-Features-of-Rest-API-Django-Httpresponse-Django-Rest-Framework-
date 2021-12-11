@@ -49,13 +49,14 @@ class StatusDetailsView(RetrieveUpdateDestroyAPIView):
 class StatusListView(CreateModelMixin, 
                     # RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin, 
                     ListAPIView):
-    permission_classes = [IsAuthenticatedOrReadOnly]
-    # authentication_classes = [SessionAuthentication]
-    queryset = Status.objects.all()
-    serializer_class = StatusSerializers
-    # lookup_field = 'id'
-    passed_id = None
-    passed_data = None
+    permission_classes          = [IsAuthenticatedOrReadOnly]
+    # authentication_classes    = [SessionAuthentication]
+    queryset                    = Status.objects.all()
+    serializer_class            = StatusSerializers
+    search_fields               = ['user__username', 'user__email', 'content',]
+    # lookup_field              = 'id'
+    passed_id                   = None
+    passed_data                 = None
 
     def is_valid_json(self, data):
         try:
@@ -81,7 +82,7 @@ class StatusListView(CreateModelMixin,
     def get_queryset(self):
         request = self.request
         qs = Status.objects.all()
-        search = request.GET.get('search', None)
+        search = request.GET.get('q', None)
         if search is not None:
             qs = qs.filter(content__icontains=search)
         return qs
